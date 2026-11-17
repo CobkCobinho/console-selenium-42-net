@@ -20,7 +20,7 @@ internal sealed class DuckDuckGoPage
     public DuckDuckGoPage(IWebDriver driver)
     {
         this.driver = driver;
-        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(ManualVerificationEnabled ? 240 : 30));
         wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(StaleElementReferenceException));
     }
 
@@ -115,6 +115,12 @@ internal sealed class DuckDuckGoPage
             .FirstOrDefault(element => element.Displayed && element.Enabled);
     })!;
 
+    private static bool ManualVerificationEnabled =>
+        string.Equals(Environment.GetEnvironmentVariable("CAPTCHA_MANUAL"), "true",
+            StringComparison.OrdinalIgnoreCase) &&
+        string.Equals(Environment.GetEnvironmentVariable("HEADLESS"), "false",
+            StringComparison.OrdinalIgnoreCase);
+
     private static bool HasHumanChallenge(IWebDriver browser) =>
         browser.FindElements(By.TagName("body")).Any(body =>
             body.Text.Contains("Please complete the following challenge", StringComparison.OrdinalIgnoreCase));
@@ -123,11 +129,7 @@ internal sealed class DuckDuckGoPage
     {
         if (!HasHumanChallenge(browser)) return;
 
-        var interactive = string.Equals(Environment.GetEnvironmentVariable("CAPTCHA_MANUAL"), "true",
-            StringComparison.OrdinalIgnoreCase) &&
-            string.Equals(Environment.GetEnvironmentVariable("HEADLESS"), "false",
-                StringComparison.OrdinalIgnoreCase);
-        if (!interactive)
+        if (!ManualVerificationEnabled)
             throw new InvalidOperationException(
                 "DuckDuckGo exige CAPTCHA. O cenário não foi concluído. " +
                 "Execute ./executar-testes.ps1 para abrir o Chrome e permitir confirmação humana.");

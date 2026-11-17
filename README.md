@@ -74,21 +74,19 @@ Como os cenários dependem de um site público, mudanças de layout, indisponibi
 
 O texto da terceira sugestão é capturado durante a execução, pois as sugestões podem mudar. A comparação usa o parâmetro `q` decodificado para preservar espaços e o caractere `#`. O teste de histórico utiliza a mesma aba para que os comandos Voltar e Avançar atuem sobre a navegação testada.
 
-## Histórico de validação
+## Validação concluída
 
-- Compilação Release da solution: **aprovada, com zero erros e zero avisos**.
-- Descoberta pelo MSTest: **os três testes foram reconhecidos**.
-- Execução E2E no GitHub Actions: **três falhas por CAPTCHA do DuckDuckGo**, antes de disponibilizar os resultados. A página exibiu o aviso “Unfortunately, bots use DuckDuckGo too” e um desafio de seleção de imagens.
-- O autocompletar chegou a selecionar a terceira sugestão, `c# unit testing with nunit`, e a pesquisa correspondente foi enviada; a página seguinte também exibiu CAPTCHA.
-- A abertura do resultado externo e o histórico não puderam ser validados nessa execução, pois a busca inicial ficou bloqueada pelo desafio.
+Os três cenários foram aprovados na execução local no Windows com Chrome visível em **16/11/2026**. O relatório MSTest `TestResults/selenium.trx` foi conferido: **3 executados, 3 aprovados, 0 falhas e 0 ignorados**. O terminal registrou duração de **39,6 segundos**.
 
-[Execução com logs e evidências](https://github.com/CobkCobinho/console-selenium-42-net/actions/runs/43995161497). Para concluir a validação funcional, execute os comandos acima em uma conexão na qual o DuckDuckGo permita pesquisar. Os testes permanecem com suas asserções completas; falhas não são convertidas em sucesso ou ignoradas.
+| Cenário | Resultado |
+| --- | --- |
+| Pesquisa básica por `Selenium WebDriver C#` | Aprovado |
+| Clique na terceira sugestão de `C# unit testing` | Aprovado |
+| Resultado externo, Voltar e Avançar | Aprovado |
 
-### Revalidação no Windows
+[Detalhes da validação local](docs/validacao-local.md).
 
-- [Chrome gráfico no Windows](https://github.com/CobkCobinho/console-selenium-42-net/actions/runs/43996116759): pesquisa básica aprovada; autocompletar e histórico falharam com páginas vazias.
-- [Chrome headless no Windows](https://github.com/CobkCobinho/console-selenium-42-net/actions/runs/43996617734): os três cenários falharam; CAPTCHA confirmado na pesquisa básica e no histórico.
-- A execução integral permanece **não validada**. O script local permite a confirmação humana quando exigida pelo site, preservando as ações e asserções do enunciado.
+A execução local aprovada é distinta das tentativas anteriores no GitHub Actions, que encontraram CAPTCHA ou páginas vazias. Esses resultados anteriores não foram tratados como aprovação. O modo local preserva todas as asserções e permite confirmação humana quando o site a exige.
 
 ## Entrega
 

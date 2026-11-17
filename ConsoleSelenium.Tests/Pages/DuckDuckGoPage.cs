@@ -57,7 +57,11 @@ internal sealed class DuckDuckGoPage
     {
         wait.Until(browser => IsSearchPage(browser.Url, term));
         // A alteração da URL sozinha não comprova que os resultados carregaram.
-        wait.Until(browser => browser.FindElements(OrganicLinks).Any(link => link.Displayed));
+        wait.Until(browser =>
+        {
+            HandleHumanVerification(browser);
+            return browser.FindElements(OrganicLinks).Any(link => link.Displayed);
+        });
     }
 
     public Uri OpenFirstOrganicResult()
@@ -105,5 +109,33 @@ internal sealed class DuckDuckGoPage
     }
 
     private IWebElement GetSearchInput() => wait.Until(browser =>
-        browser.FindElements(SearchInput).FirstOrDefault(element => element.Displayed && element.Enabled))!;
+    {
+        HandleHumanVerification(browser);
+        return browser.FindElements(SearchInput)
+            .FirstOrDefault(element => element.Displayed && element.Enabled);
+    })!;
+
+    private static bool HasHumanChallenge(IWebDriver browser) =>
+        browser.FindElements(By.TagName("body")).Any(body =>
+            body.Text.Contains("Please complete the following challenge", StringComparison.OrdinalIgnoreCase));
+
+    private static void HandleHumanVerification(IWebDriver browser)
+    {
+        if (!HasHumanChallenge(browser)) return;
+
+        var interactive = string.Equals(Environment.GetEnvironmentVariable("CAPTCHA_MANUAL"), "true",
+            StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(Environment.GetEnvironmentVariable("HEADLESS"), "false",
+                StringComparison.OrdinalIgnoreCase);
+        if (!interactive)
+            throw new InvalidOperationException(
+                "DuckDuckGo exige CAPTCHA. O cenário não foi concluído. " +
+                "Execute ./executar-testes.ps1 para abrir o Chrome e permitir confirmação humana.");
+
+        Console.WriteLine("DuckDuckGo exige confirmação humana. Resolva o CAPTCHA no Chrome em até 3 minutos.");
+        var humanWait = new WebDriverWait(browser, TimeSpan.FromMinutes(3));
+        humanWait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
+        humanWait.Until(driver => !HasHumanChallenge(driver));
+        // Continua o cenário original; CAPTCHA resolvido não representa aprovação do teste.
+    }
 }

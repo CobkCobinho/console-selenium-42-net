@@ -29,6 +29,18 @@ O projeto de testes referencia o projeto console e inclui `Selenium.WebDriver`, 
 - Google Chrome instalado.
 - Acesso à internet para restaurar pacotes, resolver o ChromeDriver com Selenium Manager e acessar o DuckDuckGo e o resultado externo.
 
+## Executar no Windows com Chrome visível
+
+Na raiz do repositório, execute no PowerShell:
+
+```powershell
+.\executar-testes.ps1
+```
+
+O script restaura os pacotes, compila e executa os três cenários reais. Caso o DuckDuckGo apresente CAPTCHA, há até três minutos para a pessoa confirmar o desafio no Chrome. Depois disso, a automação continua e todas as asserções originais precisam passar. Essa opção não resolve CAPTCHA automaticamente e não considera a confirmação humana como aprovação do teste.
+
+No modo não interativo, a presença de CAPTCHA encerra o teste com uma mensagem explícita de falha. A validação completa só pode ser afirmada quando os três cenários chegarem ao fim com sucesso.
+
 ## Executar
 
 Na raiz do repositório:
@@ -62,7 +74,7 @@ Como os cenários dependem de um site público, mudanças de layout, indisponibi
 
 O texto da terceira sugestão é capturado durante a execução, pois as sugestões podem mudar. A comparação usa o parâmetro `q` decodificado para preservar espaços e o caractere `#`. O teste de histórico utiliza a mesma aba para que os comandos Voltar e Avançar atuem sobre a navegação testada.
 
-## Validação realizada
+## Histórico de validação
 
 - Compilação Release da solution: **aprovada, com zero erros e zero avisos**.
 - Descoberta pelo MSTest: **os três testes foram reconhecidos**.
@@ -71,6 +83,12 @@ O texto da terceira sugestão é capturado durante a execução, pois as sugest�
 - A abertura do resultado externo e o histórico não puderam ser validados nessa execução, pois a busca inicial ficou bloqueada pelo desafio.
 
 [Execução com logs e evidências](https://github.com/CobkCobinho/console-selenium-42-net/actions/runs/43995161497). Para concluir a validação funcional, execute os comandos acima em uma conexão na qual o DuckDuckGo permita pesquisar. Os testes permanecem com suas asserções completas; falhas não são convertidas em sucesso ou ignoradas.
+
+### Revalidação no Windows
+
+- [Chrome gráfico no Windows](https://github.com/CobkCobinho/console-selenium-42-net/actions/runs/43996116759): pesquisa básica aprovada; autocompletar e histórico falharam com páginas vazias.
+- [Chrome headless no Windows](https://github.com/CobkCobinho/console-selenium-42-net/actions/runs/43996617734): os três cenários falharam; CAPTCHA confirmado na pesquisa básica e no histórico.
+- A execução integral permanece **não validada**. O script local permite a confirmação humana quando exigida pelo site, preservando as ações e asserções do enunciado.
 
 ## Entrega
 

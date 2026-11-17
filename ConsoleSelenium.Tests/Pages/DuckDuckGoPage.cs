@@ -66,7 +66,9 @@ internal sealed class DuckDuckGoPage
             .FirstOrDefault(element => element.Displayed && element.Enabled &&
                 Uri.TryCreate(element.GetAttribute("href"), UriKind.Absolute, out var uri) &&
                 uri.Scheme is "https" or "http" && !IsDuckDuckGo(uri)));
-        var destination = new Uri(link!.GetAttribute("href"));
+        var href = link!.GetAttribute("href")
+            ?? throw new InvalidOperationException("O resultado orgânico não possui href.");
+        var destination = new Uri(href);
         // Mantém a mesma aba para exercitar o histórico.
         ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].removeAttribute('target');", link);
         link.Click();

@@ -40,6 +40,8 @@ public abstract class BrowserTestBase
             File.WriteAllText(html, Driver.PageSource);
             TestContext.AddResultFile(html);
             TestContext.WriteLine($"URL no momento da falha: {Driver.Url}");
+            var body = Driver.FindElement(By.TagName("body")).Text;
+            TestContext.WriteLine($"Conteúdo visível: {body[..Math.Min(body.Length, 2500)]}");
         }
         catch (Exception error)
         {

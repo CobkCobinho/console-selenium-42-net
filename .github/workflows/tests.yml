@@ -1,0 +1,43 @@
+name: Build e testes Selenium
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet restore ConsoleSelenium42.sln
+      - run: dotnet build ConsoleSelenium42.sln --no-restore --configuration Release
+      - run: dotnet test ConsoleSelenium42.sln --no-build --configuration Release --list-tests
+
+  selenium:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HEADLESS: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Executar os três cenários reais no Chrome
+        run: dotnet test ConsoleSelenium42.sln --configuration Release --logger "trx;LogFileName=selenium.trx" --results-directory TestResults
+      - name: Guardar resultados e evidências de falhas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-selenium
+          path: TestResults/
+          retention-days: 7

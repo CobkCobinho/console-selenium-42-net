@@ -62,6 +62,16 @@ Como os cenários dependem de um site público, mudanças de layout, indisponibi
 
 O texto da terceira sugestão é capturado durante a execução, pois as sugestões podem mudar. A comparação usa o parâmetro `q` decodificado para preservar espaços e o caractere `#`. O teste de histórico utiliza a mesma aba para que os comandos Voltar e Avançar atuem sobre a navegação testada.
 
+## Validação realizada
+
+- Compilação Release da solution: **aprovada, com zero erros e zero avisos**.
+- Descoberta pelo MSTest: **os três testes foram reconhecidos**.
+- Execução E2E no GitHub Actions: **três falhas por CAPTCHA do DuckDuckGo**, antes de disponibilizar os resultados. A página exibiu o aviso “Unfortunately, bots use DuckDuckGo too” e um desafio de seleção de imagens.
+- O autocompletar chegou a selecionar a terceira sugestão, `c# unit testing with nunit`, e a pesquisa correspondente foi enviada; a página seguinte também exibiu CAPTCHA.
+- A abertura do resultado externo e o histórico não puderam ser validados nessa execução, pois a busca inicial ficou bloqueada pelo desafio.
+
+[Execução com logs e evidências](https://github.com/CobkCobinho/console-selenium-42-net/actions/runs/43995161497). Para concluir a validação funcional, execute os comandos acima em uma conexão na qual o DuckDuckGo permita pesquisar. Os testes permanecem com suas asserções completas; falhas não são convertidas em sucesso ou ignoradas.
+
 ## Entrega
 
 [Repositório público — console-selenium-42-net](https://github.com/CobkCobinho/console-selenium-42-net)

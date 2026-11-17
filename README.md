@@ -86,4 +86,3 @@ Os três cenários foram aprovados na execução local no Windows com Chrome vis
 A execução local aprovada é distinta das tentativas anteriores no GitHub Actions, que encontraram CAPTCHA ou páginas vazias. Esses resultados anteriores não foram tratados como aprovação. O modo local preserva todas as asserções e permite confirmação humana quando o site a exige.
 
 
-Desenvolvimento individual, com apoio de IA na implementação e revisão do código.

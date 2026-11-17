@@ -23,10 +23,10 @@ jobs:
 
   selenium:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 10
     env:
-      HEADLESS: 'true'
+      HEADLESS: 'false'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4

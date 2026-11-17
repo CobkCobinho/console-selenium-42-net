@@ -1,8 +1,5 @@
 # Console Selenium 42 — .NET 10
 
-**Autor:** Luiz Henrique Souza dos Santos. Trabalho realizado individualmente.
-
-Atividade da Lista 42 de Gestão e Qualidade de Software, professor Daniel Henrique Matos de Paiva. A solução automatiza os três cenários solicitados no DuckDuckGo com C#, Selenium WebDriver e MSTest.
 
 ## Cenários implementados
 
@@ -88,8 +85,5 @@ Os três cenários foram aprovados na execução local no Windows com Chrome vis
 
 A execução local aprovada é distinta das tentativas anteriores no GitHub Actions, que encontraram CAPTCHA ou páginas vazias. Esses resultados anteriores não foram tratados como aprovação. O modo local preserva todas as asserções e permite confirmação humana quando o site a exige.
 
-## Entrega
-
-[Repositório público — console-selenium-42-net](https://github.com/CobkCobinho/console-selenium-42-net)
 
 Desenvolvimento individual, com apoio de IA na implementação e revisão do código.
